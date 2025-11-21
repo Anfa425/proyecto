@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MediCitas - Sistema de Gestión</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fas fa-heartbeat"></i>
+        <h2>MediCitas</h2>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a
+          href="#"
+          class="nav-item active"
+          onclick="mostrarSeccion('dashboard')"
+        >
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" onclick="mostrarSeccion('agendar')">
+          <i class="fas fa-calendar-plus"></i>
+          <span>Agendar Cita</span>
+        </a>
+        <a href="#" class="nav-item" onclick="mostrarSeccion('consultar')">
+          <i class="fas fa-list-ul"></i>
+          <span>Mis Citas</span>
+        </a>
+        <a href="#" class="nav-item" onclick="mostrarSeccion('estadisticas')">
+          <i class="fas fa-chart-pie"></i>
+          <span>Reportes</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <i class="fas fa-user-circle"></i>
+          <div>
+            <p class="user-name">Usuario</p>
+            <p class="user-role">Administrador</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- HEADER -->
+      <header class="top-header">
+        <div class="header-left">
+          <h1 id="page-title">Dashboard</h1>
+          <p id="page-subtitle">Resumen general del sistema</p>
+        </div>
+        <div class="header-right">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Buscar..." />
+          </div>
+          <button class="notification-btn">
+            <i class="fas fa-bell"></i>
+            <span class="badge">3</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="seccion active">
+        <div class="stats-grid">
+          <div class="stat-card blue">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="dash-total">0</h3>
+              <p>Total Citas</p>
+            </div>
+          </div>
+
+          <div class="stat-card green">
+            <div class="stat-icon">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="dash-especialidades">0</h3>
+              <p>Especialidades</p>
+            </div>
+          </div>
+
+          <div class="stat-card orange">
+            <div class="stat-icon">
+              <i class="fas fa-hospital"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="dash-centros">0</h3>
+              <p>Centros Médicos</p>
+            </div>
+          </div>
+
+          <div class="stat-card purple">
+            <div class="stat-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="dash-pendientes">0</h3>
+              <p>Pendientes</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="card chart-card">
+            <h3><i class="fas fa-chart-bar"></i> Citas Recientes</h3>
+            <div id="recent-appointments"></div>
+          </div>
+
+          <div class="card quick-actions">
+            <h3><i class="fas fa-bolt"></i> Acciones Rápidas</h3>
+            <button class="action-btn" onclick="mostrarSeccion('agendar')">
+              <i class="fas fa-plus-circle"></i>
+              Nueva Cita
+            </button>
+            <button class="action-btn" onclick="mostrarSeccion('consultar')">
+              <i class="fas fa-list"></i>
+              Ver Todas
+            </button>
+            <button class="action-btn" onclick="mostrarSeccion('estadisticas')">
+              <i class="fas fa-file-alt"></i>
+              Generar Reporte
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- AGENDAR CITA -->
+      <section id="agendar" class="seccion">
+        <div class="card form-card">
+          <div class="card-header">
+            <h2><i class="fas fa-calendar-plus"></i> Nueva Cita Médica</h2>
+            <p>Complete el formulario para agendar una cita</p>
+          </div>
+
+          <form id="formCita">
+            <div class="form-grid">
+              <div class="form-group">
+                <label><i class="fas fa-user"></i> Nombre Completo</label>
+                <input
+                  type="text"
+                  id="paciente"
+                  placeholder="Ej: Juan Pérez"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label><i class="fas fa-phone"></i> Teléfono</label>
+                <input
+                  type="tel"
+                  id="telefono"
+                  placeholder="Ej: +57 300 123 4567"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label><i class="fas fa-hospital"></i> Centro de Salud</label>
+                <select id="centro_salud" required>
+                  <option value="">Seleccione un centro</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label><i class="fas fa-stethoscope"></i> Especialidad</label>
+                <select id="especialidad" required>
+                  <option value="">Seleccione una especialidad</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label><i class="fas fa-calendar-alt"></i> Fecha</label>
+                <input type="date" id="fecha" required />
+              </div>
+
+              <div class="form-group">
+                <label><i class="fas fa-clock"></i> Hora</label>
+                <input type="time" id="hora" required />
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label
+                ><i class="fas fa-notes-medical"></i> Motivo de la
+                Consulta</label
+              >
+              <textarea
+                id="motivo"
+                rows="4"
+                placeholder="Describa brevemente el motivo de su consulta..."
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="btn-secondary"
+                onclick="document.getElementById('formCita').reset()"
+              >
+                <i class="fas fa-times"></i> Cancelar
+              </button>
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-check"></i> Agendar Cita
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- CONSULTAR CITAS -->
+      <section id="consultar" class="seccion">
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fas fa-list-ul"></i> Citas Agendadas</h2>
+            <div class="filter-buttons">
+              <button class="filter-btn active" onclick="filtrarCitas('todas')">
+                Todas
+              </button>
+              <button class="filter-btn" onclick="filtrarCitas('Pendiente')">
+                Pendientes
+              </button>
+              <button class="filter-btn" onclick="filtrarCitas('Confirmada')">
+                Confirmadas
+              </button>
+            </div>
+          </div>
+          <div id="listaCitas" class="appointments-list"></div>
+        </div>
+      </section>
+
+      <!-- ESTADÍSTICAS -->
+      <section id="estadisticas" class="seccion">
+        <div class="stats-header">
+          <div>
+            <h2><i class="fas fa-chart-pie"></i> Análisis y Reportes</h2>
+            <p>Estadísticas detalladas del sistema</p>
+          </div>
+          <button class="btn-export" onclick="exportarDatos()">
+            <i class="fas fa-download"></i> Exportar PDF
+          </button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card-large blue">
+            <h4>Total de Citas</h4>
+            <p id="totalCitas" class="stat-number-large">0</p>
+            <span class="stat-trend"
+              ><i class="fas fa-arrow-up"></i> +12% vs mes anterior</span
+            >
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="card">
+            <h3>
+              <i class="fas fa-chart-bar"></i> Distribución por Especialidad
+            </h3>
+            <div id="chartEspecialidades"></div>
+          </div>
+
+          <div class="card">
+            <h3><i class="fas fa-chart-pie"></i> Distribución por Centro</h3>
+            <div id="chartCentros"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
