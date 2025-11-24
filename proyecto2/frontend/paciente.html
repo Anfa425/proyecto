@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portal del Paciente - MediCitas</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fas fa-heartbeat"></i>
+        <h2>MediCitas</h2>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" onclick="mostrarSeccion('inicio')">
+          <i class="fas fa-home"></i>
+          <span>Inicio</span>
+        </a>
+        <a href="#" class="nav-item" onclick="mostrarSeccion('agendar')">
+          <i class="fas fa-calendar-plus"></i>
+          <span>Agendar Cita</span>
+        </a>
+        <a href="#" class="nav-item" onclick="mostrarSeccion('mis-citas')">
+          <i class="fas fa-list-ul"></i>
+          <span>Mis Citas</span>
+        </a>
+        <a href="#" class="nav-item" onclick="mostrarSeccion('historial')">
+          <i class="fas fa-history"></i>
+          <span>Historial</span>
+        </a>
+        <a href="#" class="nav-item" onclick="mostrarSeccion('examenes')">
+          <i class="fas fa-flask"></i>
+          <span>Mis Exámenes</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <i class="fas fa-user-circle"></i>
+          <div>
+            <p class="user-name" id="userName">Paciente</p>
+            <p class="user-role">Paciente</p>
+          </div>
+        </div>
+        <button
+          onclick="cerrarSesion()"
+          style="
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+          "
+        >
+          <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- HEADER -->
+      <header class="top-header">
+        <div class="header-left">
+          <h1 id="page-title">Inicio</h1>
+          <p id="page-subtitle">Bienvenido a tu portal de salud</p>
+        </div>
+        <div class="header-right">
+          <button class="notification-btn" onclick="toggleNotifications()">
+            <i class="fas fa-bell"></i>
+            <span class="badge" id="notif-badge-paciente">2</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Panel de Notificaciones -->
+      <div class="notifications-panel" id="notifications-panel-paciente">
+        <div class="notifications-header">
+          <h3><i class="fas fa-bell"></i> Notificaciones</h3>
+          <button class="mark-read-btn" onclick="markAllRead()">
+            Marcar todas como leídas
+          </button>
+        </div>
+        <div class="notifications-body" id="notifications-list-paciente">
+          <!-- Las notificaciones se cargan dinámicamente -->
+        </div>
+      </div>
+
+      <!-- INICIO -->
+      <section id="inicio" class="seccion active">
+        <div class="stats-grid">
+          <div class="stat-card blue">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="total-citas">0</h3>
+              <p>Citas Agendadas</p>
+            </div>
+          </div>
+
+          <div class="stat-card green">
+            <div class="stat-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="proxima-cita">--</h3>
+              <p>Próxima Cita</p>
+            </div>
+          </div>
+
+          <div class="stat-card orange">
+            <div class="stat-icon">
+              <i class="fas fa-flask"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="total-examenes">0</h3>
+              <p>Exámenes</p>
+            </div>
+          </div>
+
+          <div class="stat-card purple">
+            <div class="stat-icon">
+              <i class="fas fa-history"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="citas-completadas">0</h3>
+              <p>Completadas</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="card">
+            <h3><i class="fas fa-calendar-alt"></i> Próximas Citas</h3>
+            <div id="proximas-citas"></div>
+          </div>
+
+          <div class="card quick-actions">
+            <h3><i class="fas fa-bolt"></i> Acciones Rápidas</h3>
+            <button class="action-btn" onclick="mostrarSeccion('agendar')">
+              <i class="fas fa-plus-circle"></i>
+              Agendar Nueva Cita
+            </button>
+            <button class="action-btn" onclick="mostrarSeccion('mis-citas')">
+              <i class="fas fa-list"></i>
+              Ver Mis Citas
+            </button>
+            <button class="action-btn" onclick="mostrarSeccion('examenes')">
+              <i class="fas fa-flask"></i>
+              Ver Exámenes
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- AGENDAR CITA -->
+      <section id="agendar" class="seccion">
+        <div class="card form-card">
+          <div class="card-header">
+            <h2><i class="fas fa-calendar-plus"></i> Agendar Nueva Cita</h2>
+            <p>Complete el formulario para agendar su cita médica</p>
+          </div>
+
+          <form id="formCita">
+            <div class="form-grid">
+              <div class="form-group">
+                <label><i class="fas fa-hospital"></i> Centro de Salud</label>
+                <select id="centro_salud" required>
+                  <option value="">Seleccione un centro</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label><i class="fas fa-stethoscope"></i> Especialidad</label>
+                <select id="especialidad" required>
+                  <option value="">Seleccione una especialidad</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label><i class="fas fa-calendar-alt"></i> Fecha</label>
+                <input type="date" id="fecha" required />
+              </div>
+
+              <div class="form-group">
+                <label><i class="fas fa-clock"></i> Hora</label>
+                <input type="time" id="hora" required />
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label
+                ><i class="fas fa-notes-medical"></i> Motivo de la
+                Consulta</label
+              >
+              <textarea
+                id="motivo"
+                rows="4"
+                placeholder="Describa brevemente el motivo de su consulta..."
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="btn-secondary"
+                onclick="document.getElementById('formCita').reset()"
+              >
+                <i class="fas fa-times"></i> Cancelar
+              </button>
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-check"></i> Agendar Cita
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- MIS CITAS -->
+      <section id="mis-citas" class="seccion">
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fas fa-list-ul"></i> Mis Citas Agendadas</h2>
+            <div class="filter-buttons">
+              <button class="filter-btn active" onclick="filtrarCitas('todas')">
+                Todas
+              </button>
+              <button class="filter-btn" onclick="filtrarCitas('Pendiente')">
+                Pendientes
+              </button>
+              <button class="filter-btn" onclick="filtrarCitas('Confirmada')">
+                Confirmadas
+              </button>
+            </div>
+          </div>
+          <div id="listaCitas" class="appointments-list"></div>
+        </div>
+      </section>
+
+      <!-- HISTORIAL -->
+      <section id="historial" class="seccion">
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fas fa-history"></i> Historial de Citas</h2>
+            <p>Todas tus citas médicas pasadas</p>
+          </div>
+          <div id="historialCitas"></div>
+        </div>
+      </section>
+
+      <!-- EXAMENES -->
+      <section id="examenes" class="seccion">
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fas fa-flask"></i> Mis Exámenes y Resultados</h2>
+            <p>Consulta los resultados de tus exámenes médicos</p>
+          </div>
+          <div id="listaExamenes"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toast-container"></div>
+
+    <script src="paciente.js"></script>
+  </body>
+</html>
